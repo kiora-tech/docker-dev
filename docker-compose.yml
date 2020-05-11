@@ -33,6 +33,7 @@ services:
         volumes:
             - ${DOCKER_VOLUME_PATH}:/var/www
             - ./hosts:/etc/hosts
+            - /tmp:/tmp
         depends_on:
             - db
             - redis
@@ -49,6 +50,7 @@ services:
         volumes:
             - ${DOCKER_VOLUME_PATH}:/var/www
             - ./hosts:/etc/hosts
+            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
         networks:
             kiora_net:
                 ipv4_address: 172.22.0.8
@@ -58,6 +60,8 @@ services:
         image: kiora/tools:latest
         ports:
             - ${SSH_PORT}:22
+            - 8080:8080
+            - 3000:3000
         environment:
             - GIT_NAME=${GIT_NAME}
             - GIT_EMAIL=${GIT_EMAIL}
@@ -69,6 +73,8 @@ services:
             - ${DOCKER_VOLUME_PATH}:/var/www
             - ${DOCKER_VOLUME_CONFIG}:/root/.ssh
             - ./hosts:/etc/hosts
+            - /tmp:/tmp
+            - ./php.ini:/usr/local/etc/php/conf.d/php.ini
         networks:
             kiora_net:
                 ipv4_address: 172.22.0.10
