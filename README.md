@@ -3,8 +3,8 @@ Installation
 
 make install
     
-Utilisation
-===========
+Usage
+=====
 
 
 edit the file `.env`
@@ -26,3 +26,9 @@ It is for use  `make install-project`, this command clone the project and run `m
 
 
 run `make watch`
+
+
+
+HTTPS
+------
+show the cert path with `./mkcert -CAROOT`

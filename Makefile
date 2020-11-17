@@ -1,7 +1,7 @@
 include .env
 include repos
 .DEFAULT_GOAL= help
-.PHONY: help watch test docker-install install-%
+.PHONY: help watch test docker-install install-% docker-reset
 
 BASH=docker exec -it docker-dev_tools_1 bash -c
 
@@ -48,6 +48,18 @@ install-%: ${DOCKER_VOLUME_PATH}% watch
 	$(BASH) "cd /var/www/$(shell basename $^); make install"
 
 
-install: .env repos hosts watch
+install: .env repos hosts mkcert watch
 #	make install-...
 
+docker-reset: ## remove and pull
+	docker-compose down
+	docker-compose up -d
+
+mkcert:
+	sudo apt-get update
+	sudo apt install libnss3-tools wget -y
+	wget -O mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.2/mkcert-v1.4.2-linux-amd64
+	chmod +x mkcert
+	./mkcert -install
+	./mkcert *.localhost
+	./mkcert -CAROOT

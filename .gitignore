@@ -2,3 +2,6 @@
 .idea
 repos
 hosts
+_wildcard.localhost-key.pem
+_wildcard.localhost.pem
+mkcert
