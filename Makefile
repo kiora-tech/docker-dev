@@ -6,7 +6,7 @@ include repos
 BASH=docker exec -it docker-dev_tools_1 bash -c
 
 help:
-	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-10s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 docker-install: /usr/bin/docker /usr/bin/docker-compose ## installation de docker et docker compose
 
@@ -30,7 +30,14 @@ docker-install: /usr/bin/docker /usr/bin/docker-compose ## installation de docke
 	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 watch: /usr/bin/docker-compose /usr/bin/docker ## lancement des contenainer
-	docker-compose up -d
+	docker-compose up -d 
+	docker-compose scale redis-replicat=2 redis-sentinel=3
+
+docker-stop:
+	docker-compose stop4
+
+docker-down:
+	docker-compose down --remove-orphans
 
 .env: .env.dist
 	cp .env.dist .env
@@ -49,11 +56,13 @@ install-%: ${DOCKER_VOLUME_PATH}% watch
 
 
 install: .env repos hosts mkcert watch
-#	make install-...
 
-docker-reset: ## remove and pull
-	docker-compose down
-	docker-compose up -d
+docker-reset: docker-down watch ## remove and pull
+
+docker-restart: docker-stop watch ## restart docker
+
+nginx-%: ## nginx-(start/stop/reload)
+	docker-compose exec nginx nginx -s $(shell echo $@ | cut -c7-)
 
 mkcert:
 	sudo apt-get update
