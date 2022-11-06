@@ -74,7 +74,6 @@ services:
         volumes:
             - ${DOCKER_VOLUME_PATH}:/var/www
             - ./hosts:/etc/hosts
-            - ./symfony.conf:/etc/nginx/conf.d/symfony.conf
             - ./clients/nginx/${CLIENT}.conf:/etc/nginx/conf.d/${CLIENT}.conf
             - ./upstream.conf:/etc/nginx/conf.d/upstream.conf
             - ./_wildcard.localhost.pem:/etc/ssl/mkcert/_wildcard.localhost.pem

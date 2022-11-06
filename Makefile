@@ -33,7 +33,7 @@ watch: /usr/bin/docker-compose /usr/bin/docker ## lancement des contenainer
 	docker-compose up -d --scale redis-replicat=2 --scale redis-sentinel=3
 
 docker-stop:
-	docker-compose stop4
+	docker-compose stop
 
 docker-down:
 	docker-compose down --remove-orphans
