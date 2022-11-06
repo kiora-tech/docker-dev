@@ -30,8 +30,6 @@ services:
             echo 'sentinel failover-timeout primary 5000' >> sentinel.conf &&
             cat sentinel.conf &&
             redis-server sentinel.conf --sentinel"
-        ports:
-            - "26379-26385:26379"
         links:
             - redis-main
             - redis-replicat

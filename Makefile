@@ -30,8 +30,7 @@ docker-install: /usr/bin/docker /usr/bin/docker-compose ## installation de docke
 	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 watch: /usr/bin/docker-compose /usr/bin/docker ## lancement des contenainer
-	docker-compose up -d 
-	docker-compose scale redis-replicat=2 redis-sentinel=3
+	docker-compose up -d --scale redis-replicat=2 --scale redis-sentinel=3
 
 docker-stop:
 	docker-compose stop4
